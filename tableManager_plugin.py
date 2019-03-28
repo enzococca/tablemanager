@@ -15,12 +15,14 @@
 # *                                                                         *
 # ***************************************************************************
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from qgis.PyQt.QtCore import *
+from qgis.PyQt.QtGui import *
+from qgis.PyQt.QtWidgets import QDialog, QMessageBox, QListWidget, QListView, QFrame, QAbstractItemView, \
+    QTableWidgetItem, QListWidgetItem, QAction
 from qgis.core import *
 
 import resources_rc
-import tableManager_gui
+import tablemanager.tableManager_gui
 import os.path
 
 class tableManager:
@@ -48,8 +50,8 @@ class tableManager:
     """ get the icon from the best available theme """
     myCurThemePath = QgsApplication.activeThemePath() + "/plugins/" + theName;
     myDefThemePath = QgsApplication.defaultThemePath() + "/plugins/" + theName;
-    myQrcThemePath = ":/plugins/tableManager/icons/" + QgsApplication.themeName() + "/" + theName;
-    myQrcPath = ":/plugins/tableManager/icons/" + theName;
+    myQrcThemePath = ":/plugins/tablemanager/icons/" + QgsApplication.themeName() + "/" + theName;
+    myQrcPath = ":/plugins/tablemanager/icons/" + theName;
     if QFile.exists(myCurThemePath):
       return QIcon(myCurThemePath)
     elif QFile.exists(myDefThemePath):
@@ -100,5 +102,5 @@ class tableManager:
   elif layer.isEditable():
     QMessageBox.warning(self.iface.mainWindow(), QCoreApplication.translate('TableManager','Table manager'), QCoreApplication.translate('TableManager','The selected layer is currently in editing mode.\nPlease exit this mode before managing the table.'))
   else:
-    dialoga = tableManager_gui.TableManager(self.iface)
+    dialoga = tablemanager.tableManager_gui.TableManager(self.iface)
     dialoga.exec_()

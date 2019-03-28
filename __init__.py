@@ -25,5 +25,5 @@
 #---------------------------------------------------------------------
 
 def classFactory(iface):
-    from tableManager_plugin import tableManager
+    from tablemanager.tableManager_plugin import tableManager
     return tableManager(iface)

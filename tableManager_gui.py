@@ -15,14 +15,16 @@
 # *                                                                         *
 # ***************************************************************************
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from qgis.PyQt.QtCore import *
+from qgis.PyQt.QtGui import *
+from qgis.PyQt.QtWidgets import QDialog, QMessageBox, QListWidget, QListView, QFrame, QAbstractItemView, \
+    QTableWidgetItem, QListWidgetItem
 from qgis.core import *
 from qgis.gui import *
-from tableManagerUi import Ui_Dialog
-from tableManagerUiRename import Ui_Rename
-from tableManagerUiClone import Ui_Clone
-from tableManagerUiInsert import Ui_Insert
+from tablemanager.tableManagerUi import Ui_Dialog
+from tablemanager.tableManagerUiRename import Ui_Rename
+from tablemanager.tableManagerUiClone import Ui_Clone
+from tablemanager.tableManagerUiInsert import Ui_Insert
 import sys
 
 ########## CLASS DialogRename ##############################
@@ -168,17 +170,17 @@ class TableManager(QDialog, Ui_Dialog):
     self.selection = -1     # Don't highlight any field on startup
     self.selection_list = [] #Update: Santiago Banchero 09-06-2009
 
-    QObject.connect(self.butUp, SIGNAL('clicked()'), self.doMoveUp)
-    QObject.connect(self.butDown, SIGNAL('clicked()'), self.doMoveDown)
-    QObject.connect(self.butDel, SIGNAL('clicked()'), self.doDelete)
-    QObject.connect(self.butIns, SIGNAL('clicked()'), self.doInsert)
-    QObject.connect(self.butClone, SIGNAL('clicked()'), self.doClone)
-    QObject.connect(self.butRename, SIGNAL('clicked()'), self.doRename)
-    QObject.connect(self.butSave, SIGNAL('clicked()'), self.doSave)
-    QObject.connect(self.butSaveAs, SIGNAL('clicked()'), self.doSaveAs)
-    QObject.connect(self.buttonBox, SIGNAL('rejected()'), self.doDone)
-    QObject.connect(self.fieldsTable, SIGNAL('itemSelectionChanged ()'), self.selectionChanged)
-    QObject.connect(self.tabWidget, SIGNAL('currentChanged (int)'), self.drawDataTable)
+    self.butUp.clicked.connect( self.doMoveUp)
+    self.butDown.clicked.connect( self.doMoveDown)
+    self.butDel.clicked.connect( self.doDelete)
+    self.butIns.clicked.connect(self.doInsert)
+    self.butClone.clicked.connect( self.doClone)
+    self.butRename.clicked.connect( self.doRename)
+    self.butRename.clicked.connect( self.doSave)
+    self.butSaveAs.clicked.connect(self.doSaveAs)
+    self.buttonBox.rejected.connect( self.doDone)
+    self.fieldsTable.itemSelectionChanged.connect(self.selectionChanged)
+    self.tabWidget.currentChanged[int].connect(self.drawDataTable)
 
     self.setWindowTitle(self.tr('Table Manager: {0}').format(self.layer.name()))
     self.progressBar.setValue(0)
@@ -379,16 +381,17 @@ class TableManager(QDialog, Ui_Dialog):
 
   def doDelete(self): # Called when appropriate button was pressed
     #<---- Update: Santiago Banchero 09-06-2009 ---->
-    #self.selection_list = sorted(self.selection_list,reverse=True)
-    all_fields_to_del = [self.fields[i].name() for i in self.selection_list if i <> -1]
+    self.selection_list = sorted(self.selection_list,reverse=True)
+    all_fields_to_del = [self.fields[i].name()for i in self.selection_list if i < -1 or i >-1] 
+    
 
     warning = '<b>' + self.tr('WARNING! Are you sure you want to remove the following fields?\n{0}').format(", ".join(all_fields_to_del)) + '</b>'
     if QMessageBox.warning(self, self.tr('Delete field'), warning , QMessageBox.Yes, QMessageBox.No) == QMessageBox.No:
         return
 
     self.selection_list.sort(reverse=True) # remove them in reverse order to avoid index changes!!!
-    for r in self.selection_list:
-        if r <> -1:
+    for r in self.selection_list():
+        if r < -1 or r >-1:
             del(self.data[r])
             del(self.fields[r])
             self.fields = dict(zip(range(len(self.fields)), self.fields.values()))
