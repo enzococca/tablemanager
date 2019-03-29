@@ -17,7 +17,7 @@
 
 from qgis.PyQt.QtCore import *
 from qgis.PyQt.QtGui import *
-from qgis.PyQt.QtWidgets import QDialog, QMessageBox, QListWidget, QListView, QFrame, QAbstractItemView, \
+from qgis.PyQt.QtWidgets import QFileDialog, QDialog, QMessageBox, QListWidget, QListView, QFrame, QAbstractItemView, \
     QTableWidgetItem, QListWidgetItem
 from qgis.core import *
 from qgis.gui import *
@@ -381,7 +381,7 @@ class TableManager(QDialog, Ui_Dialog):
 
   def doDelete(self): # Called when appropriate button was pressed
     #<---- Update: Santiago Banchero 09-06-2009 ---->
-    self.selection_list = sorted(self.selection_list,reverse=True)
+    #self.selection_list = sorted(self.selection_list,reverse=True)
     all_fields_to_del = [self.fields[i].name()for i in self.selection_list if i < -1 or i >-1] 
     
 
@@ -390,7 +390,7 @@ class TableManager(QDialog, Ui_Dialog):
         return
 
     self.selection_list.sort(reverse=True) # remove them in reverse order to avoid index changes!!!
-    for r in self.selection_list():
+    for r in self.selection_list:
         if r < -1 or r >-1:
             del(self.data[r])
             del(self.fields[r])

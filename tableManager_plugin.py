@@ -21,7 +21,7 @@ from qgis.PyQt.QtWidgets import QDialog, QMessageBox, QListWidget, QListView, QF
     QTableWidgetItem, QListWidgetItem, QAction
 from qgis.core import *
 
-import resources_rc
+import tablemanager.resources_rc
 import tablemanager.tableManager_gui
 import os.path
 
