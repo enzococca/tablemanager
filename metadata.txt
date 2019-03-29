@@ -22,9 +22,9 @@ changelog=
 tags=attribute table,table,fields,vector
 
 
-homepage=https://sites.google.com/site/pyarchinit/
-tracker=https://github.com/pyarchinit/pyarchinit/issues
-repository=https://github.com/pyarchinit/pyarchinit
+homepage=https://github.com/borysiasty/tablemanager
+tracker=https://github.com/borysiasty/tablemanager/issues
+repository=https://github.com/borysiasty/tablemanager
 
 icon=icons/tableManagerIcon.png
 # experimental flag
